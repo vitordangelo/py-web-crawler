@@ -11,5 +11,7 @@
 ## Tools
 
 - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+- [Requests: HTTP for Humans](https://2.python-requests.org/en/master/)
+	- [Python’s Requests Library (Guide)](https://realpython.com/python-requests/)
 
 ---
