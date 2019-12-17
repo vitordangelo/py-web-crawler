@@ -2,3 +2,5 @@ beautifulsoup4
 requests
 html5lib
 selenium
+pymongo
+dnspython
