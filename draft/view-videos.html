@@ -1,0 +1,698 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="STYLESHEET" type="text/css" href="/public/style/main.css">
+<title>main</title>
+<META content=no-cache http-equiv=pragma>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<script type="text/javascript" src="/public/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="/public/jquery.cookie.js"></script>
+<script type="text/javascript" src="/public/common.js"></script>
+<title>File Search</title>
+<style>
+</style>
+</head>
+<body>
+<div id="setupView1">
+<DIV id=logo></DIV>
+<DIV id=mainpage>
+<DIV id=left>
+<DIV class=leftnav><!-- START OF MENU -->
+<SCRIPT language=javascript>
+function markActive(i){
+var msg=document.getElementById("m"+i);
+var tmp =msg.style.display;
+var n=11
+if(i==20)
+{
+	document.all.m20.style.display = tmp=="none"?"":"none"
+	for(var j=1;j<n-1;j++)
+	{
+		var msg=document.getElementById("m"+j);
+		{msg.style.display ="none";}
+	}
+}
+else
+{
+	if(document.getElementById("m20"))
+	{
+		for(var j=1;j<n-1;j++)
+		{
+			var msg=document.getElementById("m"+j);
+			if(i==j){
+			msg.style.display = tmp=="none"?"":"none";}
+			else
+			{msg.style.display ="none";}
+		}
+		document.all.m20.style.display ="none"
+	}
+	else
+	{
+		for(var j=1;j<n;j++)
+		{
+			var msg=document.getElementById("m"+j);
+			if(i==j){
+			msg.style.display = tmp=="none"?"":"none";}
+			else
+			{msg.style.display ="none";}
+		}
+	}
+	}
+}
+function mOvr(src,clrOver) {
+		if (!src.contains(event.fromElement)) {
+ 				src.className = clrOver;
+ 			}
+}
+function mOut(src,clrIn) {
+		if (!src.contains(event.toElement)) {
+ 				src.className = clrIn;
+ 	}
+}
+
+</SCRIPT>
+		<DIV class=leftnav_m>
+	<div class=menu_01 >
+	    <a href="javascript:markActive(2);"><script>dwn(ID_GENERAL);</script></a>
+	</div>
+	<span id="m2" style="display:none">
+	<ul>
+	  <li><a target=mainFrame href='/cgi-bin/BasicView.cgi'><script>dwn(ID_DATE);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/VehicleView.cgi'><script>dwn(ID_VEHICLE);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/NetworkView.cgi'><script>dwn(ID_NETWORK);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/DisplayView.cgi'><script>dwn(ID_DISPLAY);</script></a></li>
+	<li ><a target=mainFrame href='/cgi-bin/ChnsupView.cgi'><script>dwn(ID_CHNSUP);</script></a></li>
+	</ul>
+	</span>
+	<div class=menu_02 id ="ChnMode" name="ChnMode" style="display:none">
+		<a href="javascript:markActive(9);"><script>dwn(ID_CHN_MODE);</script></a>
+	</div>
+	<span id="m9" style="display:none">
+	<ul  >
+	<li ><a target=mainFrame href='/cgi-bin/ChnModeView.cgi'><script>dwn(ID_CHN_MODE);</script></a></li>
+	</ul>
+	</span>
+	<div class=menu_03 >
+		<a href="javascript:markActive(3);"><script>dwn(ID_RECORD);</script></a>
+	</div>
+	<span id="m3" style="display:none">
+	<ul>
+	<li><a target=mainFrame href='/cgi-bin/RecordView.cgi'><script>dwn(ID_NORMAL);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/EncodeView.cgi'><script>dwn(ID_MAIN_CODE);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/SubStreamView.cgi'><script>dwn(ID_SUBSTREAM);</script></a></li>
+	<li id="mirror" name="mirror" style="display:none"><a target=mainFrame href='/cgi-bin/MirrorView.cgi'><script>dwn(ID_MIRROR_SETUP);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/RecordPlanView.cgi'><script>dwn(ID_RECORDPLAN);</script></a></li>
+	<li id="alarmrecord" name="alarmrecord" style="display:none"><a target=mainFrame href='/cgi-bin/AlarmRecordView.cgi'><script>dwn(ID_ALARM_RECORD);</script></a></li>
+	<li id="sdrecord" name="sdrecord"  style="display:none"><a target=mainFrame href='/cgi-bin/RecSdBackupView.cgi'><script>dwn(ID_SD_RECORD);</script></a></li>
+	<li id="ipc" name="ipc" style="display:none"><a target=mainFrame href='/cgi-bin/IpcView.cgi'>IPC</a></li>
+	<!--<li><a target=mainFrame href='/cgi-bin/SpeedRecView.cgi'><script>dwn(ID_SPEED_RECORD);</script></a></li>-->
+	</ul>
+	</span>
+
+	<div class=menu_04 >
+		<a href="javascript:markActive(4);"><script>dwn(ID_ALARM);</script></a>
+	</div>
+	<span id="m4" style="display:none">
+	<ul>
+	<li><a target=mainFrame href='/cgi-bin/SensorView.cgi'><script>dwn(ID_SENSOR);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/SpeedView.cgi'><script>dwn(ID_SPEED);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/G-SensorView.cgi'><script>dwn(ID_G_SENSOR);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/TempView.cgi'><script>dwn(ID_TEMPERATURE);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/MotionView.cgi'><script>dwn(ID_MOTION);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/AlarmLinkageView.cgi'><script>dwn(ID_ALARM_LINKAGE);</script></a></li>
+	<li ><a target=mainFrame href='/cgi-bin/OtherAlarmView.cgi'><script>dwn(ID_OTHER_ALARM);</script></a></li>
+	</ul>
+	</span>
+
+	<div class=menu_05 >
+		<a href="javascript:markActive(5);"><script>dwn(ID_MODULE);</script></a>
+	</div>
+	<span id="m5" style="display:none">
+	<ul>
+	<li><a target=mainFrame href='/cgi-bin/PtzView.cgi'><script>dwn(ID_PTZ);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/WifiView.cgi'>WIFI</a></li>
+	<li><a target=mainFrame href='/cgi-bin/WirelessView.cgi'><script>dwn(ID_Wireless_Setup);</script></a></li>
+		<li><a target=mainFrame href='/cgi-bin/FuelView.cgi'><script>dwn(ID_FUEL);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/SerialView.cgi'><script>dwn(ID_Serial);</script></a></li>
+	</ul>
+	</span>
+
+	<div class=menu_06 >
+		<a href="javascript:markActive(6);"><script>dwn(ID_TOOlS);</script></a>
+	</div>
+	<span id="m6" style="display:none">
+	<ul>
+	<li><a target=mainFrame href='/cgi-bin/ConfigureView.cgi'><script>dwn(ID_CONFIG_SETUP);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/DiskManageView.cgi'><script>dwn(ID_DISK_MANAGE_SETUP);</script></a></li>
+	<li><a target=mainFrame href='/cgi-bin/LogSearchView.cgi'><script>dwn(ID_LOG_SEARCH);</script></a></li>
+	<li><a target=mainFrame href='../Reboot.html'><script>dwn(ID_REBOOT);</script></a></li>
+	</ul>
+	</span>
+
+	<div class=menu_07 >
+		<a href="javascript:markActive(7);"><script>dwn(ID_Search);</script></a>
+	</div>
+	<span id="m7" >
+	<ul>
+	<li style= "background-color:#7FFFD4 "><a target=mainFrame href='/cgi-bin/VideoSearchView.cgi'><script>dwn(ID_VIDEOS_SEARCH);</script></a></li>
+	</ul>
+	</span>
+
+	<div class=menu_08 id ="videoPlay" name="videoPlay" style="display:none">
+		<a href="javascript:markActive(8);"><script>dwn(ID_VIDEO);</script></a>
+	</div>
+	<span id="m8" style="display:none">
+	<ul>
+	<li><a target=mainFrame href='/cgi-bin/VideoView.cgi'><script>dwn(ID_VIDEO);</script></a></li>
+	</ul>
+	</span>
+
+	<!-- MENU -->
+	<div class=menu_09 >
+		<a href="javascript:markActive(10);"><script>dwn(ID_FACTORY_CHECK);</script></a>
+	</div>
+	<span id="m10" style="display:none">
+		<ul>
+			<li><a target=mainFrame href='/cgi-bin/FactoryCheckView.cgi'><script>dwn(ID_FACTORY_CHECK);</script></a></li>
+		</ul>
+	</span>
+	<!-- MENU -->
+	<div class=menu_10 >
+		<a href="javascript:markActive(1);"><script>dwn(ID_System_Info);</script></a>
+	</div>
+	<span id="m1" style="display:none">
+	<ul>
+	<li><a target=mainFrame href='/cgi-bin/SysInfoView.cgi'><script>dwn(ID_System_Info);</script></a></li>
+	</ul>
+	</span>
+ </div>
+ </DIV>
+ </DIV>
+<DIV class=right>
+<DIV id=c1>
+<H1><script>dwn(ID_File_Search);</script></H1>
+<DIV class=line_1></DIV>
+<FORM action=/cgi-bin/VideoSearchOpr.cgi method=post enctype="multipart/form-data" id="my_form">
+<div id="mMenu" class="Menu">
+<table name="dateGrid" class="table2" style="width:630px;margin-left:20px;">
+		    <tr>
+		      <td id="Day1" style="visibility:hidden;">1</td>
+		      <td id="Day2" style="visibility:hidden;">2</td>
+		      <td id="Day3" style="visibility:hidden;">3</td>
+		      <td id="Day4" style="visibility:hidden;">4</td>
+		      <td id="Day5" style="visibility:hidden;">5</td>
+		      <td id="Day6" style="visibility:hidden;">6</td>
+		      <td id="Day7" style="visibility:hidden;">7</td>
+		      <td id="Day8" style="visibility:hidden;">8</td>
+		      <td id="Day9" style="visibility:hidden;">9</td>
+		      <td id="Day10" style="visibility:hidden;">10</td>
+		      <td id="Day11" style="visibility:hidden;">11</td>
+		    </tr>
+		    <tr>
+		      <td id="Day12" style="visibility:hidden;">12</td>
+		      <td id="Day13" style="visibility:hidden;">13</td>
+		      <td id="Day14" style="visibility:hidden;">14</td>
+		      <td id="Day15" style="visibility:hidden;">15</td>
+		      <td id="Day16" style="visibility:hidden;">16</td>
+		      <td id="Day17" style="visibility:hidden;">17</td>
+		      <td id="Day18" style="visibility:hidden;">18</td>
+		      <td id="Day19" style="visibility:hidden;">19</td>
+		      <td id="Day20" style="visibility:hidden;">20</td>
+		      <td id="Day21" style="visibility:hidden;">21</td>
+		      <td id="Day22" style="visibility:hidden;">22</td>
+		    </tr>
+		    <tr>
+		      <td id="Day23" style="visibility:hidden;">23</td>
+		      <td id="Day24" style="visibility:hidden;">24</td>
+		      <td id="Day25" style="visibility:hidden;">25</td>
+		      <td id="Day26" style="visibility:hidden;">26</td>
+		      <td id="Day27" style="visibility:hidden;">27</td>
+		      <td id="Day28" style="visibility:hidden;">28</td>
+		      <td id="Day29" style="visibility:hidden;">29</td>
+		      <td id="Day30" style="visibility:hidden;">30</td>
+		      <td id="Day31" style="visibility:hidden;">31</td>
+		      <td>&nbsp;</td>
+		      <td>&nbsp;</td>
+		    </tr>
+          </table>
+<table id=mytable class=table_03 style="width:630px;margin-left:20px;">
+<tr>
+<td width="30%">
+<label><script>dwn(ID_REC_PATH);</script></label>
+</td>
+<td width="65%">
+<select id="sdcard" name="sdcard" style="width:130px;" onchange="submitForm();">
+<!--
+<option value="0"><script>dwn(ID_HDD);</script>
+<option value="1"><script>dwn(ID_MIRROR);</script>
+<option value="2"><script>dwn(ID_SD);</script>1
+<option value="3"><script>dwn(ID_SD);</script>2
+-->
+</select>
+</td>
+</tr>
+<tr class=alt>
+<td>
+<label ><script>dwn(ID_EVENT_DATE);</script></label>
+</td>
+<td>
+<span  class="divInput">
+<input type="text" size=4 maxlength=4 name="date">/
+<input type="text" size=2 maxlength=2 name="date" onkeyup="mmChange()">/
+<input type="text" size=2 maxlength=2 name="date">
+</span>
+<label id="error1" style="color:red;visibility:hidden;"><script>dwn(ID_Input_Error);</script></label>
+</td>
+</tr>
+
+<tr>
+<td>
+<label ><script>dwn(ID_START_TIME);</script></label>
+</td>
+<td>
+<span  class="divInput">
+<input type="text" size=2 maxlength=2 name="stime">:
+<input type="text" size=2 maxlength=2 name="stime">:
+<input type="text" size=2 maxlength=2 name="stime">
+</span>
+<label id="error2" style="color:red;visibility:hidden;"><script>dwn(ID_Input_Error);</script></label>
+</td>
+</tr>
+
+<tr class=alt>
+<td>
+<label ><script>dwn(ID_END_TIME);</script></label>
+</td>
+<td>
+<span  class="divInput">
+<input type="text" size=2 maxlength=2 name="etime">:
+<input type="text" size=2 maxlength=2 name="etime">:
+<input type="text" size=2 maxlength=2 name="etime">
+</span>
+<label id="error3" style="color:red;visibility:hidden;"><script>dwn(ID_Input_Error);</script></label>
+</td>
+</tr>
+
+<tr>
+<td>
+<label><script>dwn(ID_REC_TYPE);</script></label>
+</td>
+<td>
+<select name="type" style="width:130px;" onchange="submitForm();">
+<option value="1"><script>dwn(ID_ALL_TYPE);</script>
+<option value="2"><script>dwn(ID_GENERL_VIDEO);</script>
+<option value="3"><script>dwn(ID_ALARM_VIDEO);</script>
+</select>
+</td>
+</tr>
+
+<tr class=alt>
+<td>
+<label><script>dwn(ID_VIDEO_CHANNEL);</script></label>
+</td>
+<td>
+<select id="channel" name="channel" style="width:130px;" onchange="submitForm();">
+<!---
+<option value="1"><script>dwn(ID_ALL_CHANNEL);</script>
+<option value="2"><script>dwn(ID_CHANNEL_1);</script>
+<option value="3"><script>dwn(ID_CHANNEL_2);</script>
+<option value="4"><script>dwn(ID_CHANNEL_3);</script>
+<option value="5"><script>dwn(ID_CHANNEL_4);</script>
+-->
+</select>
+</td>
+</tr>
+
+<tr class=alt style="display:none">
+<td>
+<label>select</label>
+</td>
+<td>
+<select  style="width:120px;" id="select_type" name="select_type">
+<option value="0">0
+<option value="1">1
+</select>
+</td>
+</tr>
+
+</table>
+<tr>
+<div id="buttonArea" align="center">
+<input class=btn_blue onmouseover="this.className='btn_ora'" onmouseout="this.className='btn_blue'" type=submit id = "Search" value="Search" name=Save onclick="return checkInput();">
+<script>$("#Search").val(ID_Search);</script>
+</div>
+</tr>
+
+</div>
+</FORM>
+</DIV>
+</div>
+</body>
+</html>
+<script>
+window.onload=function()
+{
+	var dates = document.getElementsByName("date");
+	var stimes = document.getElementsByName("stime");
+	var etimes = document.getElementsByName("etime");
+	var maxdaytable=[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	var yy,mm,dd;
+	var maxday;
+	yy = dates[0].value;
+	mm = dates[1].value;
+	dd = dates[2].value;
+	maxday = maxdaytable[mm-1];
+	for(var i=1;i<=maxday;i++)
+	{
+		document.getElementById("Day"+i).style.visibility ="visible";
+	}
+
+}
+
+function mmChange()
+{
+	var dates = document.getElementsByName("date");
+	var maxdaytable=[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	var yy,mm,dd;
+	var maxday;
+
+	mm = dates[1].value;
+	maxday = maxdaytable[mm-1];
+	for(var i=1;i<=31;i++)
+	{
+		document.getElementById("Day"+i).style.visibility ="hidden";
+		document.getElementById("Day"+i).style.backgroundColor="aliceblue";
+	}
+	for(var i=1;i<=maxday;i++)
+	{
+		document.getElementById("Day"+i).style.visibility ="visible";
+	}
+	submitForm();
+}
+
+document.onkeydown = function(e)
+{
+	var k;
+	var sk;
+	if(window.event) // IE8 and earlier
+	{
+		k = window.event.keyCode;
+		sk = window.event.shiftKey;
+	}
+	else if(e.which) // IE9/Firefox/Chrome/Opera/Safari
+	{
+	k = e.which;
+	sk = e.shiftKey;
+	}
+	if((k>=48&&k<=57)||(k>=96&&k<=105))
+	{
+		if (sk)
+		{
+			if(window.event)
+			{
+				window.event.returnValue=false;
+			}
+			else
+			{
+				e.preventDefault();
+			}
+		}
+	}
+	else if (k != 37 && k != 39 && k != 8 && k != 13 && k != 46  && k != 9 )
+	{
+		if(window.event)
+		{
+			window.event.returnValue=false;
+		}
+		else
+		{
+			e.preventDefault();
+		}
+	}
+}
+
+function checkInput()
+{
+	document.getElementById("select_type").options[0].selected = 'selected';
+	var dates = document.getElementsByName("date");
+	var stimes = document.getElementsByName("stime");
+	var etimes = document.getElementsByName("etime");
+	var maxdaytable=[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	var yy,mm,dd,shh,smm,sss,ehh,emm,ess;
+
+	yy = dates[0].value;
+	mm = dates[1].value;
+	dd = dates[2].value;
+	if(yy<2000||yy>2037||mm==0||mm>12||dd==0||dd>maxdaytable[mm-1])
+	{
+		document.getElementById("error1").style.visibility ="visible";
+		return false;
+	}
+	else
+	{
+		document.getElementById("error1").style.visibility ="hidden";
+	}
+
+	shh = stimes[0].value;
+	smm = stimes[1].value;
+	sss = stimes[2].value;
+
+	if(shh>23||smm>59||sss>59)
+	{
+		document.getElementById("error2").style.visibility ="visible";
+		return false;
+	}
+	else
+	{
+		document.getElementById("error2").style.visibility ="hidden";
+	}
+
+	ehh = etimes[0].value;
+	emm = etimes[1].value;
+	ess = etimes[2].value;
+
+	if(ehh>23||emm>59||ess>59)
+	{
+		document.getElementById("error3").style.visibility ="visible";
+		return false;
+	}
+	else
+	{
+		document.getElementById("error3").style.visibility ="hidden";
+	}
+
+	return true;
+}
+
+</script>
+<script>
+var b_ms = 0;
+var b_chnmode = 0;
+var b_ipc = 0;
+var b_alarmrec = 0;
+var b_mir = 0;
+var b_sdrec = 0;
+$(document).ready(function() {
+    $.ajax({
+        url: '/conf/conf.xml',
+        type: 'GET',
+        dataType: 'xml',
+        timeout: 1000,  //设定超时
+        cache: false,   //禁用缓存
+        error: function(xml) {
+            alert("load xml error!");
+
+        },
+        success: GetVideochnnumComplete   //设置成功后回调函数
+    });
+});
+
+//获取XML成功后回调函数
+function GetVideochnnumComplete(xml) {
+    $(xml).find("Video").each(function(i) {     //查找所有Video节点并遍历
+    var Ms = $(this).children("Ms");          //获得子节点
+    b_ms = parseInt(Ms.text());    		//获取节点文本
+	if(b_ms)
+	{
+
+
+	}
+	else
+	{
+
+
+	}
+
+	var chnmode = $(this).children("MulType");          //获得子节点
+    b_chnmode = parseInt(chnmode.text());    		//获取节点文本
+
+	if(b_chnmode)
+	{
+		document.getElementById("ChnMode").style.display="";
+	}
+	else
+	{
+		document.getElementById("ChnMode").style.display="none";
+	}
+
+	var ipc = $(this).children("IPC");          //获得子节点
+    b_ipc = parseInt(ipc.text());    		//获取节点文本
+
+	if(b_ipc)
+	{
+		document.getElementById("ipc").style.display="";
+	}
+	else
+	{
+		document.getElementById("ipc").style.display="none";
+	}
+
+	var alarmrec = $(this).children("AlarmRec");          //获得子节点
+    b_alarmrec = parseInt(alarmrec.text());    		//获取节点文本
+    b_alarmrec = 0;/*各机型暂时均不支持报警录像*/
+	if(b_alarmrec)
+	{
+		document.getElementById("alarmrecord").style.display="";
+	}
+	else
+	{
+		document.getElementById("alarmrecord").style.display="none";
+	}
+
+	var mirror = $(this).children("Mirror");    //获得子节点
+    b_mir = parseInt(mirror.text());    		//获取节点文本
+
+	if(b_mir)
+	{
+		document.getElementById("mirror").style.display="";
+	}
+	else
+	{
+		document.getElementById("mirror").style.display="none";
+	}
+
+	var sdRec = $(this).children("SdRec");          //获得子节点
+    b_sdrec = parseInt(sdRec.text());    		//获取节点文本
+	if(b_sdrec)
+	{
+		document.getElementById("sdrecord").style.display="";
+	}
+	else
+	{
+		document.getElementById("sdrecord").style.display="none";
+	}
+
+	var product_type =  $(this).children("productType");
+	b_productype = parseInt(product_type.text());
+
+	if(b_productype == MDVR_JT1_1080P)
+	{
+		document.getElementById("videoPlay").style.display="none";
+		document.getElementById("logo").style.display="none";
+	}
+	else
+	{
+		document.getElementById("videoPlay").style.display="";
+		document.getElementById("logo").style.display="";
+	}
+
+});
+}
+
+//select单击提交表单
+function submitForm(){
+	document.getElementById("select_type").options[1].selected = 'selected';
+    var form = document.getElementById("my_form");//获取form表单对象
+    form.submit();//form表单提交
+}
+</script>
+
+
+
+<script>
+var mNode_date = document.getElementsByName("date");
+mNode_date[0].value="2020";
+mNode_date[1].value="1";
+mNode_date[2].value="13";
+var mNode_stime = document.getElementsByName("stime");
+mNode_stime[0].value="00";
+mNode_stime[1].value="00";
+mNode_stime[2].value="00";
+var mNode_etime = document.getElementsByName("etime");
+mNode_etime[0].value="23";
+mNode_etime[1].value="59";
+mNode_etime[2].value="59";
+var mNode_select_type = document.getElementsByName("select_type");
+mNode_select_type[0].value="0";
+var spaceCount = document.getElementById("sdcard");
+spaceCount.options.add(new Option("SD1",0));
+spaceCount.options.add(new Option("SD2",1));
+var chnCount = document.getElementById("channel");
+chnCount.options.add(new Option('ALL',1));
+chnCount.options.add(new Option('CH1',2));
+chnCount.options.add(new Option('CH2',3));
+chnCount.options.add(new Option('CH3',4));
+chnCount.options.add(new Option('CH4',5));
+var day0 = document.getElementById("Day1");
+day0.style.backgroundColor="aliceblue";
+var day1 = document.getElementById("Day2");
+day1.style.backgroundColor="aliceblue";
+var day2 = document.getElementById("Day3");
+day2.style.backgroundColor="aliceblue";
+var day3 = document.getElementById("Day4");
+day3.style.backgroundColor="aliceblue";
+var day4 = document.getElementById("Day5");
+day4.style.backgroundColor="aliceblue";
+var day5 = document.getElementById("Day6");
+day5.style.backgroundColor="aliceblue";
+var day6 = document.getElementById("Day7");
+day6.style.backgroundColor="aliceblue";
+var day7 = document.getElementById("Day8");
+day7.style.backgroundColor="aliceblue";
+var day8 = document.getElementById("Day9");
+day8.style.backgroundColor="aliceblue";
+var day9 = document.getElementById("Day10");
+day9.style.backgroundColor="aliceblue";
+var day10 = document.getElementById("Day11");
+day10.style.backgroundColor="aliceblue";
+var day11 = document.getElementById("Day12");
+day11.style.backgroundColor="aliceblue";
+var day12 = document.getElementById("Day13");
+day12.style.backgroundColor="#669900";
+var day13 = document.getElementById("Day14");
+day13.style.backgroundColor="aliceblue";
+var day14 = document.getElementById("Day15");
+day14.style.backgroundColor="aliceblue";
+var day15 = document.getElementById("Day16");
+day15.style.backgroundColor="aliceblue";
+var day16 = document.getElementById("Day17");
+day16.style.backgroundColor="aliceblue";
+var day17 = document.getElementById("Day18");
+day17.style.backgroundColor="aliceblue";
+var day18 = document.getElementById("Day19");
+day18.style.backgroundColor="aliceblue";
+var day19 = document.getElementById("Day20");
+day19.style.backgroundColor="aliceblue";
+var day20 = document.getElementById("Day21");
+day20.style.backgroundColor="aliceblue";
+var day21 = document.getElementById("Day22");
+day21.style.backgroundColor="aliceblue";
+var day22 = document.getElementById("Day23");
+day22.style.backgroundColor="aliceblue";
+var day23 = document.getElementById("Day24");
+day23.style.backgroundColor="aliceblue";
+var day24 = document.getElementById("Day25");
+day24.style.backgroundColor="aliceblue";
+var day25 = document.getElementById("Day26");
+day25.style.backgroundColor="aliceblue";
+var day26 = document.getElementById("Day27");
+day26.style.backgroundColor="aliceblue";
+var day27 = document.getElementById("Day28");
+day27.style.backgroundColor="aliceblue";
+var day28 = document.getElementById("Day29");
+day28.style.backgroundColor="aliceblue";
+var day29 = document.getElementById("Day30");
+day29.style.backgroundColor="aliceblue";
+var day30 = document.getElementById("Day31");
+day30.style.backgroundColor="aliceblue";
+</script>
