@@ -1,0 +1,2324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link href="/public/style/main.css" rel="STYLESHEET" type="text/css" />
+    <title>
+      main
+    </title>
+    <meta content="no-cache" http-equiv="pragma" />
+    <!--meta http-equiv="refresh" content="10"-->
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <script src="/public/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="/public/jquery.cookie.js" type="text/javascript"></script>
+    <script src="/public/common.js" type="text/javascript"></script>
+    <title>
+      Basic
+    </title>
+    <style></style>
+  </head>
+  <body>
+    <div id="showtime"></div>
+    <div id="setupView1">
+      <div id="logo"></div>
+      <div id="mainpage">
+        <div id="left">
+          <div class="leftnav">
+            <!-- START OF MENU -->
+            <script language="javascript">
+              function markActive(i) {
+                var msg = document.getElementById("m" + i);
+                var tmp = msg.style.display;
+                var n = 11;
+                if (i == 20) {
+                  document.all.m20.style.display = tmp == "none" ? "" : "none";
+                  for (var j = 1; j < n - 1; j++) {
+                    var msg = document.getElementById("m" + j);
+                    {
+                      msg.style.display = "none";
+                    }
+                  }
+                } else {
+                  if (document.getElementById("m20")) {
+                    for (var j = 1; j < n - 1; j++) {
+                      var msg = document.getElementById("m" + j);
+                      if (i == j) {
+                        msg.style.display = tmp == "none" ? "" : "none";
+                      } else {
+                        msg.style.display = "none";
+                      }
+                    }
+                    document.all.m20.style.display = "none";
+                  } else {
+                    for (var j = 1; j < n; j++) {
+                      var msg = document.getElementById("m" + j);
+                      if (i == j) {
+                        msg.style.display = tmp == "none" ? "" : "none";
+                      } else {
+                        msg.style.display = "none";
+                      }
+                    }
+                  }
+                }
+              }
+              function mOvr(src, clrOver) {
+                if (!src.contains(event.fromElement)) {
+                  src.className = clrOver;
+                }
+              }
+              function mOut(src, clrIn) {
+                if (!src.contains(event.toElement)) {
+                  src.className = clrIn;
+                }
+              }
+
+              var g_curYear = 0;
+              var g_curMoun = 0;
+              var g_curDay = 0;
+              var g_curHour = 0;
+              var g_curMin = 0;
+              var g_curSec = 0;
+              var g_mounthList = [
+                31,
+                28,
+                31,
+                30,
+                31,
+                30,
+                31,
+                31,
+                30,
+                31,
+                30,
+                31
+              ];
+              var TimeType = 0;
+
+              function updatetime() {
+                g_curSec++;
+                if (g_curSec > 59) {
+                  g_curSec = 0;
+                  g_curMin++;
+                }
+
+                if (g_curMin > 59) {
+                  g_curMin = 0;
+                  g_curHour++;
+                }
+
+                if (
+                  (TimeType == 0 && g_curHour > 24) ||
+                  (TimeType == 1 && g_curHour > 12)
+                ) {
+                  g_curHour = 1;
+                  g_curDay++;
+                }
+
+                if (g_curDay > g_mounthList[g_curMoun - 1]) {
+                  g_curDay = 1;
+                  g_curMoun++;
+                }
+
+                if (g_curMoun > 12) {
+                  g_curMoun = 1;
+                  g_curYear++;
+
+                  if (
+                    (g_curYear % 4 == 0 && g_curYear % 100 != 0) ||
+                    (g_curYear % 4 == 0 && g_curYear % 400 == 0)
+                  ) {
+                    //闰年
+                    g_mounthList[1] = 29;
+                  } else {
+                    g_mounthList[1] = 28;
+                  }
+                }
+              }
+
+              $(function() {
+                setInterval("getTime();", 1000); //每隔1秒运行一次
+              });
+              //取得系统当前时间
+              function getTime() {
+                /*
+		$.ajax({
+	        url: '/cgi-bin/detecttime.cgi',
+	        type: 'GET',
+	        data: 'method',
+	        dataType: 'xml',
+	        timeout: 1000,  //设定超时
+	        cache: false,   //禁用缓存
+	        error: function(sData) {
+	            alert("load xml error!");
+	        },
+	        success: function(sData){   //设置成功后回调函数
+   	            //alert("update finished!");
+				var msg = ($(sData).find("message").text());
+
+				var date = $(sData).find("date").text();
+				var hours = $(sData).find("hour").text();
+				var minutes = $(sData).find("minute").text();
+				var seconds = $(sData).find("second").text();
+				//$("#showtime").html(date+" "+hours+":"+minutes+":"+seconds + ""); //将值赋给div
+	        }
+    	});
+	*/
+                //alert(b_timefocus);
+                if (b_timefocus <= 0) {
+                  //编辑时间时，不更新时间
+                  updatetime();
+                  if (dateType == 0) {
+                    document.getElementById("dateyear").id = "dateyear";
+                    document.getElementById("datemounth").id = "datemounth";
+                    document.getElementById("dateday").id = "dateday";
+                  } else if (dateType == 1) {
+                    document.getElementById("dateyear").id = "dateday";
+                    document.getElementById("datemounth").id = "datemounth";
+                    document.getElementById("dateday").id = "dateyear";
+                  } else if (dateType == 2) {
+                    document.getElementById("dateyear").id = "datemounth";
+                    document.getElementById("datemounth").id = "dateday";
+                    document.getElementById("dateday").id = "dateyear";
+                  }
+
+                  //$("#dateyear").val(g_curYear);
+                  //$("#datemounth").val(g_curMoun);
+                  //$("#dateday").val(g_curDay);
+                  $("#timehour").val(g_curHour);
+                  $("#timeminute").val(g_curMin);
+                  $("#timesecond").val(g_curSec);
+                }
+              }
+            </script>
+            <div class="leftnav_m">
+              <div class="menu_01">
+                <a href="javascript:markActive(2);">
+                  <script>
+                    dwn(ID_GENERAL);
+                  </script>
+                </a>
+              </div>
+              <span id="m2">
+                <ul>
+                  <li style="background-color:#7FFFD4 ">
+                    <a href="/cgi-bin/BasicView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_DATE);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/VehicleView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_VEHICLE);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/NetworkView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_NETWORK);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/DisplayView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_DISPLAY);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/ChnsupView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_CHNSUP);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <div
+                class="menu_02"
+                id="ChnMode"
+                name="ChnMode"
+                style="display:none"
+              >
+                <a href="javascript:markActive(9);">
+                  <script>
+                    dwn(ID_CHN_MODE);
+                  </script>
+                </a>
+              </div>
+              <span id="m9" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/ChnModeView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_CHN_MODE);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <div class="menu_03">
+                <a href="javascript:markActive(3);">
+                  <script>
+                    dwn(ID_RECORD);
+                  </script>
+                </a>
+              </div>
+              <span id="m3" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/RecordView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_NORMAL);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/EncodeView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_MAIN_CODE);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/SubStreamView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_SUBSTREAM);
+                      </script>
+                    </a>
+                  </li>
+                  <li id="mirror" name="mirror" style="display:none">
+                    <a href="/cgi-bin/MirrorView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_MIRROR_SETUP);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/RecordPlanView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_RECORDPLAN);
+                      </script>
+                    </a>
+                  </li>
+                  <li id="alarmrecord" name="alarmrecord" style="display:none">
+                    <a href="/cgi-bin/AlarmRecordView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_ALARM_RECORD);
+                      </script>
+                    </a>
+                  </li>
+                  <li id="sdrecord" name="sdrecord" style="display:none">
+                    <a href="/cgi-bin/RecSdBackupView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_SD_RECORD);
+                      </script>
+                    </a>
+                  </li>
+                  <li id="ipc" name="ipc" style="display:none">
+                    <a href="/cgi-bin/IpcView.cgi" target="mainFrame">
+                      IPC
+                    </a>
+                  </li>
+                  <!--<li><a target=mainFrame href='/cgi-bin/SpeedRecView.cgi'><script>dwn(ID_SPEED_RECORD);</script></a></li>-->
+                </ul>
+              </span>
+              <div class="menu_04">
+                <a href="javascript:markActive(4);">
+                  <script>
+                    dwn(ID_ALARM);
+                  </script>
+                </a>
+              </div>
+              <span id="m4" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/SensorView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_SENSOR);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/SpeedView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_SPEED);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/G-SensorView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_G_SENSOR);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/TempView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_TEMPERATURE);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/MotionView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_MOTION);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/AlarmLinkageView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_ALARM_LINKAGE);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/OtherAlarmView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_OTHER_ALARM);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <div class="menu_05">
+                <a href="javascript:markActive(5);">
+                  <script>
+                    dwn(ID_MODULE);
+                  </script>
+                </a>
+              </div>
+              <span id="m5" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/PtzView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_PTZ);
+                      </script>
+                    </a>
+                  </li>
+                  <li id="WifiView" name="WifiView" style="display:none">
+                    <a href="/cgi-bin/WifiView.cgi" target="mainFrame">
+                      WIFI
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/WirelessView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_Wireless_Setup);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/FuelView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_FUEL);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/SerialView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_Serial);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <div class="menu_06">
+                <a href="javascript:markActive(6);">
+                  <script>
+                    dwn(ID_TOOlS);
+                  </script>
+                </a>
+              </div>
+              <span id="m6" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/ConfigureView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_CONFIG_SETUP);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/DiskManageView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_DISK_MANAGE_SETUP);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/cgi-bin/LogSearchView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_LOG_SEARCH);
+                      </script>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="../Reboot.html" target="mainFrame">
+                      <script>
+                        dwn(ID_REBOOT);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <div class="menu_07">
+                <a href="javascript:markActive(7);">
+                  <script>
+                    dwn(ID_Search);
+                  </script>
+                </a>
+              </div>
+              <span id="m7" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/VideoSearchView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_VIDEOS_SEARCH);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <div
+                class="menu_08"
+                id="videoPlay"
+                name="videoPlay"
+                style="display:none"
+              >
+                <a href="javascript:markActive(8);">
+                  <script>
+                    dwn(ID_VIDEO);
+                  </script>
+                </a>
+              </div>
+              <span id="m8" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/VideoView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_VIDEO);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <!-- MENU -->
+              <div class="menu_09">
+                <a href="javascript:markActive(10);">
+                  <script>
+                    dwn(ID_FACTORY_CHECK);
+                  </script>
+                </a>
+              </div>
+              <span id="m10" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/FactoryCheckView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_FACTORY_CHECK);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+              <!-- MENU -->
+              <div class="menu_10">
+                <a href="javascript:markActive(1);">
+                  <script>
+                    dwn(ID_System_Info);
+                  </script>
+                </a>
+              </div>
+              <span id="m1" style="display:none">
+                <ul>
+                  <li>
+                    <a href="/cgi-bin/SysInfoView.cgi" target="mainFrame">
+                      <script>
+                        dwn(ID_System_Info);
+                      </script>
+                    </a>
+                  </li>
+                </ul>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <div id="c1">
+            <h1>
+              <script>
+                dwn(ID_Basic_Setup);
+              </script>
+            </h1>
+            <div class="line_1"></div>
+            <form
+              action="/cgi-bin/BasicOpr.cgi"
+              enctype="multipart/form-data"
+              method="post"
+              style="margin:0px"
+            >
+              <table class="table_03" id="mytable">
+                <tbody>
+                  <tr>
+                    <td width="17%">
+                      <script>
+                        dwn(ID_DATE_FORMAT);
+                      </script>
+                    </td>
+                    <td width="20%">
+                      <select
+                        id="DateType"
+                        name="DateType"
+                        onchange="dateTypeChange(this)"
+                        style="width:100px;"
+                      >
+                        <option value="0">
+                          <script>
+                            dwn(ID_YY_MM_DD);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_DD_MM_YY);
+                          </script>
+                        </option>
+                        <option value="2">
+                          <script>
+                            dwn(ID_MM_DD_YY);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                    <td width="15%">
+                      <script>
+                        dwn(ID_DATE_2);
+                      </script>
+                    </td>
+                    <td width="30%">
+                      <span class="divInput">
+                        <input
+                          class="text"
+                          id="dateyear"
+                          maxlength="5"
+                          name="date"
+                          size="5"
+                          style="width:50px;"
+                          type="number"
+                        />
+                        /
+                        <input
+                          class="text"
+                          id="datemounth"
+                          maxlength="3"
+                          name="date"
+                          size="3"
+                          style="width:30px;"
+                          type="number"
+                        />
+                        /
+                        <input
+                          class="text"
+                          id="dateday"
+                          maxlength="5"
+                          name="date"
+                          size="5"
+                          style="width:40px;"
+                          type="number"
+                        />
+                      </span>
+                    </td>
+                    <td width="27%">
+                      <span id="error1" style="color:red;visibility:hidden;">
+                        <script>
+                          dwn(ID_Input_Error);
+                        </script>
+                      </span>
+                    </td>
+                  </tr>
+                  <tr class="alt">
+                    <td>
+                      <script>
+                        dwn(ID_TIME_FORMAT);
+                      </script>
+                    </td>
+                    <td>
+                      <select
+                        name="TimeType"
+                        onchange="timeTypeChange(this)"
+                        style="width:100px;"
+                      >
+                        <option value="0">
+                          <script>
+                            dwn(ID_24_HOURS);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_12_HOURS);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                    <td>
+                      <script>
+                        dwn(ID_TIME);
+                      </script>
+                    </td>
+                    <td>
+                      <span class="divInput">
+                        <input
+                          class="text"
+                          id="timehour"
+                          maxlength="2"
+                          name="time"
+                          size="2"
+                          style="width:35px;"
+                          type="number"
+                        />
+                        :
+                        <input
+                          class="text"
+                          id="timeminute"
+                          maxlength="2"
+                          name="time"
+                          size="2"
+                          style="width:35px;"
+                          type="number"
+                        />
+                        :
+                        <input
+                          class="text"
+                          id="timesecond"
+                          maxlength="2"
+                          name="time"
+                          size="2"
+                          style="width:35px;"
+                          type="number"
+                        />
+                        <select name="tm" style="width:55px;">
+                          <option value="0">
+                            <script>
+                              dwn(ID_AM);
+                            </script>
+                          </option>
+                          <option value="1">
+                            <script>
+                              dwn(ID_PM);
+                            </script>
+                          </option>
+                        </select>
+                      </span>
+                    </td>
+                    <td>
+                      <span id="error2" style="color:red;visibility:hidden;">
+                        <script>
+                          dwn(ID_Input_Error);
+                        </script>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table_03" id="mytable">
+                <tbody>
+                  <tr>
+                    <td width="17%">
+                      <script>
+                        dwn(ID_TIME_ZONE);
+                      </script>
+                    </td>
+                    <td width="82%">
+                      <select
+                        id="TimeZone"
+                        name="TimeZone"
+                        onchange="TimeZoneChange(this)"
+                        style="width:100px;"
+                      >
+                        <option value="0">
+                          GMT-12
+                        </option>
+                        <option value="1">
+                          GMT-11
+                        </option>
+                        <option value="2">
+                          GMT-10
+                        </option>
+                        <option value="3">
+                          GMT-9
+                        </option>
+                        <option value="4">
+                          GMT-8
+                        </option>
+                        <option value="5">
+                          GMT-7
+                        </option>
+                        <option value="6">
+                          GMT-6
+                        </option>
+                        <option value="7">
+                          GMT-5
+                        </option>
+                        <option value="8">
+                          GMT-4
+                        </option>
+                        <option value="9">
+                          GMT-3
+                        </option>
+                        <option value="10">
+                          GMT-2
+                        </option>
+                        <option value="11">
+                          GMT-1
+                        </option>
+                        <option value="12">
+                          GMT+0
+                        </option>
+                        <option value="13">
+                          GMT+1
+                        </option>
+                        <option value="14">
+                          GMT+2
+                        </option>
+                        <option value="15">
+                          GMT+3
+                        </option>
+                        <option value="16">
+                          GMT+4
+                        </option>
+                        <option value="17">
+                          GMT+5
+                        </option>
+                        <option value="18">
+                          GMT+6
+                        </option>
+                        <option value="19">
+                          GMT+7
+                        </option>
+                        <option value="20">
+                          GMT+8
+                        </option>
+                        <option value="21">
+                          GMT+9
+                        </option>
+                        <option value="22">
+                          GMT+10
+                        </option>
+                        <option value="23">
+                          GMT+11
+                        </option>
+                        <option value="24">
+                          GMT+12
+                        </option>
+                      </select>
+                      <span style="margin:0;padding:0;width:15px;">
+                        +
+                      </span>
+                      <select
+                        id="m_ExtZone"
+                        name="m_ExtZone"
+                        onchange="ExtZoneChange(this)"
+                        style="width:45px;"
+                      >
+                        <option value="0">
+                          0
+                        </option>
+                        <option value="15">
+                          15
+                        </option>
+                        <option value="30">
+                          30
+                        </option>
+                        <option value="45">
+                          45
+                        </option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table_03" id="mytable">
+                <tbody>
+                  <tr class="alt">
+                    <td width="17%">
+                      <script>
+                        dwn(ID_DST);
+                      </script>
+                    </td>
+                    <td width="20%">
+                      <select
+                        name="DSTonoff"
+                        onchange="DstTypeChange(this)"
+                        style="width:100px;"
+                      >
+                        <option value="0">
+                          <script>
+                            dwn(ID_OFF);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_ON);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                    <td width="15%">
+                      <span id="DSTAdjusttd">
+                        <script>
+                          dwn(ID_DST_ADJUST);
+                        </script>
+                      </span>
+                    </td>
+                    <td width="20%">
+                      <select name="DSTAdjust">
+                        <option value="0">
+                          <script>
+                            dwn(ID_NONE);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_15_MINS);
+                          </script>
+                        </option>
+                        <option value="2">
+                          <script>
+                            dwn(ID_30_MINS);
+                          </script>
+                        </option>
+                        <option value="3">
+                          <script>
+                            dwn(ID_45_MINS);
+                          </script>
+                        </option>
+                        <option value="4">
+                          <script>
+                            dwn(ID_1_HOUR);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="17%">
+                      <span id="DSTSTART" style="width:72px;">
+                        <script>
+                          dwn(ID_DST_START);
+                        </script>
+                      </span>
+                    </td>
+                    <td width="20%">
+                      <select name="start_month" style="width:50px;">
+                        <option value="0">
+                          <script>
+                            dwn(ID_Jan);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_Feb);
+                          </script>
+                        </option>
+                        <option value="2">
+                          <script>
+                            dwn(ID_Mar);
+                          </script>
+                        </option>
+                        <option value="3">
+                          <script>
+                            dwn(ID_Apr);
+                          </script>
+                        </option>
+                        <option value="4">
+                          <script>
+                            dwn(ID_May);
+                          </script>
+                        </option>
+                        <option value="5">
+                          <script>
+                            dwn(ID_Jun);
+                          </script>
+                        </option>
+                        <option value="6">
+                          <script>
+                            dwn(ID_Jul);
+                          </script>
+                        </option>
+                        <option value="7">
+                          <script>
+                            dwn(ID_Aug);
+                          </script>
+                        </option>
+                        <option value="8">
+                          <script>
+                            dwn(ID_Sep);
+                          </script>
+                        </option>
+                        <option value="9">
+                          <script>
+                            dwn(ID_Oct);
+                          </script>
+                        </option>
+                        <option value="10">
+                          <script>
+                            dwn(ID_Nov);
+                          </script>
+                        </option>
+                        <option value="11">
+                          <script>
+                            dwn(ID_Dec);
+                          </script>
+                        </option>
+                      </select>
+                      <select name="start_sunday" style="width:48px;">
+                        <option value="0">
+                          <script>
+                            dwn(ID_1st_Sunday);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_2nd_Sunday);
+                          </script>
+                        </option>
+                        <option value="2">
+                          <script>
+                            dwn(ID_3rd_Sunday);
+                          </script>
+                        </option>
+                        <option value="3">
+                          <script>
+                            dwn(ID_4th_Sunday);
+                          </script>
+                        </option>
+                        <option value="4">
+                          <script>
+                            dwn(ID_last_Sunday);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                    <td width="15%">
+                      <span id="DSTEnd" style="width:57px;">
+                        <script>
+                          dwn(ID_DST_END);
+                        </script>
+                      </span>
+                    </td>
+                    <td width="20%">
+                      <select name="end_month" style="width:50px;">
+                        <option value="0">
+                          <script>
+                            dwn(ID_Jan);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_Feb);
+                          </script>
+                        </option>
+                        <option value="2">
+                          <script>
+                            dwn(ID_Mar);
+                          </script>
+                        </option>
+                        <option value="3">
+                          <script>
+                            dwn(ID_Apr);
+                          </script>
+                        </option>
+                        <option value="4">
+                          <script>
+                            dwn(ID_May);
+                          </script>
+                        </option>
+                        <option value="5">
+                          <script>
+                            dwn(ID_Jun);
+                          </script>
+                        </option>
+                        <option value="6">
+                          <script>
+                            dwn(ID_Jul);
+                          </script>
+                        </option>
+                        <option value="7">
+                          <script>
+                            dwn(ID_Aug);
+                          </script>
+                        </option>
+                        <option value="8">
+                          <script>
+                            dwn(ID_Sep);
+                          </script>
+                        </option>
+                        <option value="9">
+                          <script>
+                            dwn(ID_Oct);
+                          </script>
+                        </option>
+                        <option value="10">
+                          <script>
+                            dwn(ID_Nov);
+                          </script>
+                        </option>
+                        <option value="11">
+                          <script>
+                            dwn(ID_Dec);
+                          </script>
+                        </option>
+                      </select>
+                      <select name="end_sunday" style="width:48px;">
+                        <option value="0">
+                          <script>
+                            dwn(ID_1st_Sunday);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_2nd_Sunday);
+                          </script>
+                        </option>
+                        <option value="2">
+                          <script>
+                            dwn(ID_3rd_Sunday);
+                          </script>
+                        </option>
+                        <option value="3">
+                          <script>
+                            dwn(ID_4th_Sunday);
+                          </script>
+                        </option>
+                        <option value="4">
+                          <script>
+                            dwn(ID_last_Sunday);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr class="alt">
+                    <td>
+                      <script>
+                        dwn(ID_OPR_DELAY);
+                      </script>
+                    </td>
+                    <td>
+                      <select name="OprTimeOut" style="width:90px;">
+                        <option value="0">
+                          <script>
+                            dwn(ID_1_MIN);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_5_MINS);
+                          </script>
+                        </option>
+                        <option value="2">
+                          <script>
+                            dwn(ID_15_MINS);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <script>
+                        dwn(ID_REGULATE_MODE);
+                      </script>
+                    </td>
+                    <td>
+                      <select
+                        name="TimingMode"
+                        onchange="TimingModeChange(this)"
+                        style="width:90px;"
+                      >
+                        <option value="0">
+                          <script>
+                            dwn(ID_MANUAL);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_GPS_TIME);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr class="alt">
+                    <td id="timingtimelab">
+                      <script>
+                        dwn(ID_REGULATE_TIME);
+                      </script>
+                    </td>
+                    <td id="timingtimetd">
+                      <span class="divInput">
+                        <input
+                          maxlength="2"
+                          name="timingtime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                        :
+                        <input
+                          maxlength="2"
+                          name="timingtime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                        :
+                        <input
+                          maxlength="2"
+                          name="timingtime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                      </span>
+                    </td>
+                    <td id="timingtimetderror" style="visibility:hidden;">
+                      <span id="error3" style="color:red;visibility:hidden;">
+                        <script>
+                          dwn(ID_Input_Error);
+                        </script>
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <script>
+                        dwn(ID_POWER_MODE);
+                      </script>
+                    </td>
+                    <td>
+                      <select
+                        name="PowerOnMode"
+                        onchange="PowerModeChange(this)"
+                        style="width:100px;"
+                      >
+                        <option value="0">
+                          <script>
+                            dwn(ID_IGNITION);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_TIMERS);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                    <td width="17%">
+                      <span id="pod1" style="visibility:visible;">
+                        <script>
+                          dwn(ID_POWER_OFF_DELAY);
+                        </script>
+                      </span>
+                    </td>
+                    <td width="83%">
+                      <input
+                        id="pod2"
+                        maxlength="4"
+                        name="DelayTime"
+                        style="width:50px;"
+                      />
+                      <span id="pod3">
+                        <script>
+                          dwn(ID_5_180_MINS);
+                        </script>
+                      </span>
+                      <span id="error4" style="color:red;visibility:hidden;">
+                        <script>
+                          dwn(ID_Input_Error);
+                        </script>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table_03">
+                <tbody>
+                  <tr>
+                    <td width="17%">
+                      <span id="poweron">
+                        <script>
+                          dwn(ID_POWER_ON);
+                        </script>
+                      </span>
+                    </td>
+                    <td width="21%">
+                      <span>
+                        <input
+                          id="pnt1"
+                          maxlength="2"
+                          name="PowerOnTime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                        <span id="pnt4" style="width:1px;height:2px">
+                          :
+                        </span>
+                        <input
+                          id="pnt2"
+                          maxlength="2"
+                          name="PowerOnTime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                        <span id="pnt5" style="width:1px;height:2px">
+                          :
+                        </span>
+                        <input
+                          id="pnt3"
+                          maxlength="2"
+                          name="PowerOnTime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                      </span>
+                    </td>
+                    <td width="14%">
+                      <span id="poweroff">
+                        <script>
+                          dwn(ID_POWER_OFF);
+                        </script>
+                      </span>
+                    </td>
+                    <td width="21%">
+                      <span>
+                        <input
+                          id="pft1"
+                          maxlength="2"
+                          name="PowerOffTime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                        <span id="pft4" style="width:1px;height:2px">
+                          :
+                        </span>
+                        <input
+                          id="pft2"
+                          maxlength="2"
+                          name="PowerOffTime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                        <span id="pft5" style="width:1px;height:2px">
+                          :
+                        </span>
+                        <input
+                          id="pft3"
+                          maxlength="2"
+                          name="PowerOffTime"
+                          size="2"
+                          style="width:25px;"
+                        />
+                      </span>
+                    </td>
+                    <td width="27%">
+                      <span id="error6" style="color:red;visibility:hidden;">
+                        <script>
+                          dwn(ID_Input_Error);
+                        </script>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table_03" id="mytable">
+                <tbody>
+                  <tr class="alt">
+                    <td width="17%">
+                      <script>
+                        dwn(ID_MAINTENANCE);
+                      </script>
+                    </td>
+                    <td width="20%">
+                      <select name="Maintonoff">
+                        <option value="0">
+                          <script>
+                            dwn(ID_OFF);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_ON);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                    <td width="15%">
+                      <span id="MaintTimeLab">
+                        <script>
+                          dwn(ID_TIME_D);
+                        </script>
+                      </span>
+                    </td>
+                    <td width="30%">
+                      <span class="divInput">
+                        <input
+                          id="pnt1"
+                          maxlength="2/"
+                          name="MaintTime"
+                          size="2"
+                        />
+                        <span id="pnt4" style="width:1px;height:2px">
+                          :
+                        </span>
+                        <input
+                          id="pnt2"
+                          maxlength="2/"
+                          name="MaintTime"
+                          size="2"
+                        />
+                        <span id="pnt5" style="width:1px;height:2px">
+                          :
+                        </span>
+                        <input
+                          id="pnt3"
+                          maxlength="2/"
+                          name="MaintTime"
+                          size="2"
+                        />
+                      </span>
+                    </td>
+                    <td width="27%">
+                      <span id="error5" style="color:red;visibility:hidden;">
+                        <script>
+                          dwn(ID_Input_Error);
+                        </script>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <input name="Aout_Volume" type="hidden" />
+              <input name="LiveView_Mode" type="hidden" />
+              <table class="table_03" id="mytable">
+                <tbody>
+                  <tr class="alt">
+                    <td width="17%">
+                      <span id="pod5">
+                        <script>
+                          dwn(ID_POWER_OFF_VOL);
+                        </script>
+                      </span>
+                    </td>
+                    <td width="53%">
+                      <input
+                        maxlength="4"
+                        name="DelayOffVol"
+                        size="4"
+                        step="0.1"
+                        style="width:50px;"
+                        type="number"
+                      />
+                      <span id="pod7">
+                        <input
+                          disabled="disabled"
+                          name="PowerInVoltage"
+                          style="border:0px;background:rgba(0, 0, 0, 0); "
+                          type="text"
+                        />
+                        <!--script>dwn(ID_8_12_V);</script-->
+                      </span>
+                      <span id="error7" style="color:red;visibility:hidden;">
+                        <script>
+                          dwn(ID_Input_Error);
+                        </script>
+                      </span>
+                    </td>
+                    <td id="battery" style="visibility:hidden;" width="40%">
+                      <span id="battery_title">
+                        <script>
+                          dwn(ID_BATTERY);
+                        </script>
+                      </span>
+                      <select id="battery_turn" name="battery_turn">
+                        <option value="0">
+                          <script>
+                            dwn(ID_ON);
+                          </script>
+                        </option>
+                        <option value="1">
+                          <script>
+                            dwn(ID_OFF);
+                          </script>
+                        </option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div align="center" id="buttonArea">
+                <input
+                  class="btn_blue"
+                  id="save"
+                  name="Save"
+                  onclick="return checkInput();"
+                  onmouseout="this.className='btn_blue'"
+                  onmouseover="this.className='btn_ora'"
+                  type="submit"
+                  value="Save"
+                />
+                <script>
+                  $("#save").val(ID_SAVE);
+                </script>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <script>
+        var dateType = document.getElementById("DateType").value;
+        var TimeZone;
+        var mExtZone;
+
+        function datetimeInit() {
+          g_curYear = document.getElementById("dateyear").value;
+          g_curMoun = document.getElementById("datemounth").value;
+          g_curDay = document.getElementById("dateday").value;
+          g_curHour = document.getElementById("timehour").value;
+          g_curMin = document.getElementById("timeminute").value;
+          g_curSec = document.getElementById("timesecond").value;
+
+          if (
+            (g_curYear % 4 == 0 && g_curYear % 100 != 0) ||
+            (g_curYear % 4 == 0 && g_curYear % 400 == 0)
+          ) {
+            //闰年
+            g_mounthList[1] = 29;
+          }
+        }
+
+        window.onload = function() {
+          var timeZone = document.getElementById("TimeZone").value;
+          mExtZone = document.getElementById("m_ExtZone").value;
+
+          TimeZone = timeZone;
+          var PowerOnMode = document.getElementsByName("PowerOnMode")[0].value;
+          //alert(PowerOnMode);
+          var poweron = document.getElementById("poweron");
+          var poweroff = document.getElementById("poweroff");
+          var pnt1 = document.getElementById("pnt1");
+          var pnt2 = document.getElementById("pnt2");
+          var pnt3 = document.getElementById("pnt3");
+          var pnt4 = document.getElementById("pnt4");
+          var pnt5 = document.getElementById("pnt5");
+          var pft1 = document.getElementById("pft1");
+          var pft2 = document.getElementById("pft2");
+          var pft3 = document.getElementById("pft3");
+          var pft4 = document.getElementById("pft4");
+          var pft5 = document.getElementById("pft5");
+          var pod1 = document.getElementById("pod1");
+          var pod2 = document.getElementById("pod2");
+          var pod3 = document.getElementById("pod3");
+
+          var DSTonoff = document.getElementsByName("DSTonoff")[0].value;
+
+          var dstNode1 = document.getElementsByName("start_month")[0];
+          var dstNode2 = document.getElementsByName("start_sunday")[0];
+          var dstNode3 = document.getElementsByName("end_month")[0];
+          var dstNode4 = document.getElementsByName("end_sunday")[0];
+          var dstNode5 = document.getElementById("DSTSTART");
+          var dstNode6 = document.getElementById("DSTEnd");
+          var dstNode7 = document.getElementsByName("DSTAdjust")[0];
+          var dstNode8 = document.getElementById("DSTAdjusttd");
+          TimeType = document.getElementsByName("TimeType")[0].value;
+          var tmNode = document.getElementsByName("tm")[0];
+          var timeNodes = document.getElementsByName("time");
+          var DateType = document.getElementById("DateType").value;
+          dateType = DateType;
+
+          var timingMode = document.getElementsByName("TimingMode")[0].value;
+          var timingtimelab = document.getElementById("timingtimelab");
+          var timingtimetd = document.getElementById("timingtimetd");
+          //alert(timingMode);
+          if (timingMode == 0) {
+            timingtimelab.style.visibility = "hidden";
+            timingtimetd.style.visibility = "hidden";
+          } else {
+            timingtimelab.style.visibility = "visible";
+            timingtimetd.style.visibility = "visible";
+          }
+
+          if (TimeType == 0) {
+            tmNode.style.visibility = "hidden";
+          } else {
+            tmNode.style.visibility = "visible";
+          }
+
+          if (PowerOnMode == 0) {
+            poweron.style.visibility = "hidden";
+            poweroff.style.visibility = "hidden";
+            pnt1.style.visibility = "hidden";
+            pnt2.style.visibility = "hidden";
+            pnt3.style.visibility = "hidden";
+            pnt4.style.visibility = "hidden";
+            pnt5.style.visibility = "hidden";
+            pft1.style.visibility = "hidden";
+            pft2.style.visibility = "hidden";
+            pft3.style.visibility = "hidden";
+            pft4.style.visibility = "hidden";
+            pft5.style.visibility = "hidden";
+            pod1.style.visibility = "visible";
+            pod2.style.visibility = "visible";
+            pod3.style.visibility = "visible";
+          } else {
+            poweron.style.visibility = "visible";
+            poweroff.style.visibility = "visible";
+            pnt1.style.visibility = "visible";
+            pnt2.style.visibility = "visible";
+            pnt3.style.visibility = "visible";
+            pnt4.style.visibility = "visible";
+            pnt5.style.visibility = "visible";
+            pft1.style.visibility = "visible";
+            pft2.style.visibility = "visible";
+            pft3.style.visibility = "visible";
+            pft4.style.visibility = "visible";
+            pft5.style.visibility = "visible";
+            pod1.style.visibility = "hidden";
+            pod2.style.visibility = "hidden";
+            pod3.style.visibility = "hidden";
+          }
+
+          if (DSTonoff == 0) {
+            dstNode1.style.visibility = "hidden";
+            dstNode2.style.visibility = "hidden";
+            dstNode3.style.visibility = "hidden";
+            dstNode4.style.visibility = "hidden";
+            dstNode5.style.visibility = "hidden";
+            dstNode6.style.visibility = "hidden";
+            dstNode7.style.visibility = "hidden";
+            dstNode8.style.visibility = "hidden";
+          } else {
+            dstNode1.style.visibility = "visible";
+            dstNode2.style.visibility = "visible";
+            dstNode3.style.visibility = "visible";
+            dstNode4.style.visibility = "visible";
+            dstNode5.style.visibility = "visible";
+            dstNode6.style.visibility = "visible";
+            dstNode7.style.visibility = "visible";
+            dstNode8.style.visibility = "visible";
+          }
+
+          datetimeInit();
+        };
+
+        function Div(exp1, exp2) {
+          //整除
+          var n1 = Math.round(exp1); //四舍五入
+          var n2 = Math.round(exp2); //四舍五入
+
+          var rslt = n1 / n2; //除
+
+          if (rslt >= 0) {
+            rslt = Math.floor(rslt); //返回小于等于原rslt的最大整数。
+          } else {
+            rslt = Math.ceil(rslt); //返回大于等于原rslt的最小整数。
+          }
+
+          return rslt;
+        }
+
+        function TimeZoneChange(obj) {
+          var diffsec, diffsec1, dffhour, dffhour1;
+          var TimeZoneobj = obj.value;
+          var timeNodes = document.getElementsByName("time");
+          var dateNodes = document.getElementsByName("date");
+          var TimeZoneDiff = (TimeZoneobj - TimeZone) * 3600;
+          var TimeZoneDiff1 = (TimeZone - TimeZoneobj) * 3600;
+          var DateType1 = document.getElementById("DateType").value;
+          if (TimeZoneDiff > 0) {
+            diffsec =
+              parseInt(timeNodes[0].value) * 3600 +
+              parseInt(timeNodes[1].value) * 60 +
+              parseInt(timeNodes[2].value) +
+              TimeZoneDiff;
+            dffhour = Div(diffsec, 3600);
+            if (diffsec > 86400) {
+              timeNodes[0].value = dffhour - 24;
+              if (DateType1 == 0) {
+                dateNodes[2].value = parseInt(dateNodes[2].value) + 1;
+              } else if (DateType1 == 1) {
+                dateNodes[0].value = parseInt(dateNodes[0].value) + 1;
+              } else {
+                dateNodes[1].value = parseInt(dateNodes[1].value) + 1;
+              }
+            } else {
+              timeNodes[0].value = dffhour;
+            }
+          } else {
+            diffsec1 =
+              parseInt(timeNodes[0].value) * 3600 +
+              parseInt(timeNodes[1].value) * 60 +
+              parseInt(timeNodes[2].value) -
+              TimeZoneDiff1;
+            dffhour1 = Div(diffsec1, 3600);
+            if (diffsec1 < 0) {
+              timeNodes[0].value = 23 + dffhour1;
+              if (DateType1 == 0) {
+                dateNodes[2].value -= 1;
+              } else if (DateType1 == 1) {
+                dateNodes[0].value -= 1;
+              } else {
+                dateNodes[1].value -= 1;
+              }
+            } else {
+              timeNodes[0].value = dffhour1;
+            }
+          }
+          TimeZone = obj.value;
+        }
+
+        function ExtZoneChange(obj) {
+          var diffsec,
+            diffsec1,
+            dffhour,
+            dffhour1,
+            dffmin,
+            dffmin1,
+            dffsec,
+            dffsec1,
+            dffm,
+            dffm1;
+          var timeNodes = document.getElementsByName("time");
+          var dateNodes = document.getElementsByName("date");
+          var ExtZoneobj = obj.value;
+          var ExtZonediff = ExtZoneobj - mExtZone;
+          var ExtZonediff1 = mExtZone - ExtZoneobj;
+
+          diffsec =
+            parseInt(timeNodes[0].value) * 3600 +
+            parseInt(timeNodes[1].value) * 60 +
+            parseInt(timeNodes[2].value) +
+            ExtZonediff * 60;
+          diffsec1 =
+            parseInt(timeNodes[0].value) * 3600 +
+            parseInt(timeNodes[1].value) * 60 +
+            parseInt(timeNodes[2].value) -
+            ExtZonediff1 * 60;
+          dffhour = Div(diffsec, 3600);
+          dffmin = diffsec % 3600;
+          dffm = Div(dffmin, 60);
+          dffsec = dffmin - dffm * 60;
+
+          dffhour1 = Div(diffsec1, 3600);
+          dffmin1 = diffsec1 % 3600;
+          dffm1 = Div(dffmin1, 60);
+          dffsec1 = dffmin1 - dffm1 * 60;
+
+          if (ExtZonediff >= 0) {
+            if (diffsec > 86400) {
+              timeNodes[0].value = dffhour - 24;
+              dateNodes[2].value = parseInt(dateNodes[2].value) + 1;
+              timeNodes[1].value = dffm;
+              timeNodes[2].value = dffsec;
+            } else {
+              timeNodes[0].value = dffhour;
+              timeNodes[1].value = dffm;
+              timeNodes[2].value = dffsec;
+            }
+          } else {
+            if (diffsec1 < 0) {
+              timeNodes[0].value = 23 + dffhour1;
+              dateNodes[2].value -= 1;
+              timeNodes[1].value = dffmin1;
+              timeNodes[2].value = dffsec1;
+            } else {
+              timeNodes[0].value = dffhour1;
+              timeNodes[1].value = dffm1;
+              timeNodes[2].value = dffsec1;
+            }
+          }
+          mExtZone = obj.value;
+        }
+
+        function DstTypeChange(obj) {
+          var dstNode1 = document.getElementsByName("start_month")[0];
+          var dstNode2 = document.getElementsByName("start_sunday")[0];
+          var dstNode3 = document.getElementsByName("end_month")[0];
+          var dstNode4 = document.getElementsByName("end_sunday")[0];
+          var dstNode5 = document.getElementById("DSTSTART");
+          var dstNode6 = document.getElementById("DSTEnd");
+          var dstNode7 = document.getElementsByName("DSTAdjust")[0];
+          var dstNode8 = document.getElementById("DSTAdjusttd");
+          if (obj.value == 0) {
+            dstNode1.style.visibility = "hidden";
+            dstNode2.style.visibility = "hidden";
+            dstNode3.style.visibility = "hidden";
+            dstNode4.style.visibility = "hidden";
+            dstNode5.style.visibility = "hidden";
+            dstNode6.style.visibility = "hidden";
+            dstNode7.style.visibility = "hidden";
+            dstNode8.style.visibility = "hidden";
+          } else {
+            dstNode1.style.visibility = "visible";
+            dstNode2.style.visibility = "visible";
+            dstNode3.style.visibility = "visible";
+            dstNode4.style.visibility = "visible";
+            dstNode5.style.visibility = "visible";
+            dstNode6.style.visibility = "visible";
+            dstNode7.style.visibility = "visible";
+            dstNode8.style.visibility = "visible";
+          }
+        }
+
+        function timeTypeChange(obj) {
+          var tmNode = document.getElementsByName("tm")[0];
+          var timeNodes = document.getElementsByName("time");
+
+          if (obj.value == 0) {
+            tmNode.style.visibility = "hidden";
+            if (tmNode.value == 1) {
+              timeNodes[0].value = parseInt(timeNodes[0].value) + 12;
+            }
+          } else {
+            tmNode.style.visibility = "visible";
+            if (parseInt(timeNodes[0].value) >= 12) {
+              tmNode.value = 1;
+              timeNodes[0].value = parseInt(timeNodes[0].value) - 12;
+            } else {
+              tmNode.value = 0;
+            }
+          }
+          TimeType = obj.value;
+          g_curHour = timeNodes[0].value;
+        }
+
+        function dateTypeChange(obj) {
+          var dates = document.getElementsByName("date");
+          var yy, mm, dd;
+          if (dateType == 0) {
+            yy = dates[0].value;
+            mm = dates[1].value;
+            dd = dates[2].value;
+          } else if (dateType == 1) {
+            yy = dates[2].value;
+            mm = dates[1].value;
+            dd = dates[0].value;
+          } else {
+            yy = dates[2].value;
+            mm = dates[0].value;
+            dd = dates[1].value;
+          }
+
+          if (obj.value == 1) {
+            dates[0].value = dd;
+            dates[1].value = mm;
+            dates[2].value = yy;
+          } else if (obj.value == 2) {
+            dates[0].value = mm;
+            dates[1].value = dd;
+            dates[2].value = yy;
+          } else {
+            dates[0].value = yy;
+            dates[1].value = mm;
+            dates[2].value = dd;
+          }
+
+          dateType = obj.value;
+        }
+
+        function TimingModeChange(obj) {
+          var timingtimelab = document.getElementById("timingtimelab");
+          var timingtimetd = document.getElementById("timingtimetd");
+          var timingtimetderror = document.getElementById("timingtimetderror");
+
+          if (obj.value == 0) {
+            timingtimelab.style.visibility = "hidden";
+            timingtimetd.style.visibility = "hidden";
+            timingtimetderror.style.visibility = "hidden";
+            document.getElementById("error3").style.visibility = "hidden";
+          } else {
+            timingtimelab.style.visibility = "visible";
+            timingtimetd.style.visibility = "visible";
+          }
+        }
+
+        function PowerModeChange(obj) {
+          var poweron = document.getElementById("poweron");
+          var poweroff = document.getElementById("poweroff");
+          var pnt1 = document.getElementById("pnt1");
+          var pnt2 = document.getElementById("pnt2");
+          var pnt3 = document.getElementById("pnt3");
+          var pnt4 = document.getElementById("pnt4");
+          var pnt5 = document.getElementById("pnt5");
+          var pft1 = document.getElementById("pft1");
+          var pft2 = document.getElementById("pft2");
+          var pft3 = document.getElementById("pft3");
+          var pft4 = document.getElementById("pft4");
+          var pft5 = document.getElementById("pft5");
+          var pod1 = document.getElementById("pod1");
+          var pod2 = document.getElementById("pod2");
+          var pod3 = document.getElementById("pod3");
+          var delaySwitch = document.getElementsByName("DelaySwitch")[0];
+          if (obj.value == 0) {
+            poweron.style.visibility = "hidden";
+            poweroff.style.visibility = "hidden";
+            pnt1.style.visibility = "hidden";
+            pnt2.style.visibility = "hidden";
+            pnt3.style.visibility = "hidden";
+            pnt4.style.visibility = "hidden";
+            pnt5.style.visibility = "hidden";
+            pft1.style.visibility = "hidden";
+            pft2.style.visibility = "hidden";
+            pft3.style.visibility = "hidden";
+            pft4.style.visibility = "hidden";
+            pft5.style.visibility = "hidden";
+            pod1.style.visibility = "visible";
+            pod2.style.visibility = "visible";
+            pod3.style.visibility = "visible";
+            delaySwitch.value = 1;
+          } else {
+            poweron.style.visibility = "visible";
+            poweroff.style.visibility = "visible";
+            pnt1.style.visibility = "visible";
+            pnt2.style.visibility = "visible";
+            pnt3.style.visibility = "visible";
+            pnt4.style.visibility = "visible";
+            pnt5.style.visibility = "visible";
+            pft1.style.visibility = "visible";
+            pft2.style.visibility = "visible";
+            pft3.style.visibility = "visible";
+            pft4.style.visibility = "visible";
+            pft5.style.visibility = "visible";
+            pod1.style.visibility = "hidden";
+            pod2.style.visibility = "hidden";
+            pod3.style.visibility = "hidden";
+            delaySwitch.value = 0;
+          }
+        }
+
+        /*
+document.onkeydown = function(e)
+{
+var k;
+var sk;
+if(window.event) // IE8 and earlier
+{
+k = window.event.keyCode;
+sk = window.event.shiftKey;
+}
+else if(e.which) // IE9/Firefox/Chrome/Opera/Safari
+{
+k = e.which;
+sk = e.shiftKey;
+}
+if ((k>=48&&k<=57)||(k>=96&&k<=105)) {
+if (sk) {
+if(window.event){
+window.event.returnValue=false;
+}
+else{
+e.preventDefault();
+}
+}
+}
+else if (k != 37 && k != 39 && k != 8 && k != 13 && k != 46  && k != 9 ) {
+if(window.event){
+window.event.returnValue=false;
+}
+else{
+e.preventDefault();
+}
+}
+}
+*/
+        document.onkeydown = function(e) {
+          var k;
+          var sk;
+          if (window.event) {
+            // IE8 and earlier
+            k = window.event.keyCode;
+            sk = window.event.shiftKey;
+          } else if (e.which) {
+            // IE9/Firefox/Chrome/Opera/Safari
+            k = e.which;
+            sk = e.shiftKey;
+          }
+          if ((k >= 48 && k <= 57) || (k >= 96 && k <= 105)) {
+            if (sk) {
+              if (window.event) {
+                window.event.returnValue = false;
+              } else {
+                e.preventDefault();
+              }
+            }
+          } else if (
+            k != 37 &&
+            k != 39 &&
+            k != 8 &&
+            k != 13 &&
+            k != 46 &&
+            k != 9 &&
+            k != 110 &&
+            k != 190
+          ) {
+            if (window.event) {
+              window.event.returnValue = false;
+            } else {
+              e.preventDefault();
+            }
+          }
+        };
+
+        function checkInput() {
+          var ret = true;
+          var maxdaytable = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+          var dates = document.getElementsByName("date");
+          var times = document.getElementsByName("time");
+          var timeType = document.getElementsByName("TimeType")[0].value;
+          var timingtimes = document.getElementsByName("timingtime");
+          var PowerOnTimes = document.getElementsByName("PowerOnTime");
+          var PowerOffTimes = document.getElementsByName("PowerOffTime");
+          var delayTime = document.getElementsByName("DelayTime")[0].value;
+          var delayOffVol = document.getElementsByName("DelayOffVol")[0].value;
+
+          var PowerInVoltage = document.getElementsByName("PowerInVoltage")[0]
+            .value;
+
+          var a = PowerInVoltage.split("(");
+          var float_min = parseFloat(a[1]);
+
+          var b = a[1].split("-");
+          var float_max = parseFloat(b[1]);
+
+          //var Ext_TimeZone = document.getElementsByName("Ext_TimeZone")[0].value;
+          var dateType1 = document.getElementsByName("DateType")[0].value;
+
+          var yy, mm, dd, hh, mm1, ss;
+          if (dateType1 == 0) {
+            yy = dates[0].value;
+            mm = dates[1].value;
+            dd = dates[2].value;
+          } else if (dateType1 == 1) {
+            yy = dates[2].value;
+            mm = dates[1].value;
+            dd = dates[0].value;
+          } else if (dateType1 == 2) {
+            yy = dates[2].value;
+            mm = dates[0].value;
+            dd = dates[1].value;
+          }
+
+          if (
+            yy < 2000 ||
+            yy > 2099 ||
+            mm == 0 ||
+            mm > 12 ||
+            dd == 0 ||
+            dd > maxdaytable[mm - 1]
+          ) {
+            document.getElementById("error1").style.visibility = "visible";
+            ret = false;
+          } else {
+            document.getElementById("error1").style.visibility = "hidden";
+          }
+
+          hh = times[0].value;
+          mm1 = times[1].value;
+          ss = times[2].value;
+          if (ss > 59 || mm1 > 59 || hh > 23) {
+            ret = false;
+            document.getElementById("error2").style.visibility = "visible";
+          } else if (timeType == 1 && hh > 11) {
+            ret = false;
+            document.getElementById("error2").style.visibility = "visible";
+          } else {
+            document.getElementById("error2").style.visibility = "hidden";
+          }
+
+          hh = timingtimes[0].value;
+          mm1 = timingtimes[1].value;
+          ss = timingtimes[2].value;
+          if (ss > 59 || mm1 > 59 || hh > 23) {
+            ret = false;
+            document.getElementById("timingtimetderror").style.visibility =
+              "visible";
+            document.getElementById("error3").style.visibility = "visible";
+          } else {
+            document.getElementById("timingtimetderror").style.visibility =
+              "hidden";
+            document.getElementById("error3").style.visibility = "hidden";
+          }
+
+          hh = PowerOnTimes[0].value;
+          mm1 = PowerOnTimes[1].value;
+          ss = PowerOnTimes[2].value;
+          if (ss > 59 || mm1 > 59 || hh > 23) {
+            ret = false;
+            document.getElementById("error5").style.visibility = "visible";
+          } else {
+            document.getElementById("error5").style.visibility = "hidden";
+          }
+
+          hh = PowerOffTimes[0].value;
+          mm1 = PowerOffTimes[1].value;
+          ss = PowerOffTimes[2].value;
+          if (ss > 59 || mm1 > 59 || hh > 23) {
+            ret = false;
+            document.getElementById("error6").style.visibility = "visible";
+          } else {
+            document.getElementById("error6").style.visibility = "hidden";
+          }
+
+          if (delayTime < 0 || delayTime > 1440) {
+            ret = false;
+            document.getElementById("error4").style.visibility = "visible";
+          } else {
+            document.getElementById("error4").style.visibility = "hidden";
+          }
+
+          if (delayOffVol < float_min || delayOffVol > float_max) {
+            ret = false;
+            document.getElementById("error7").style.visibility = "visible";
+          } else {
+            document.getElementById("error7").style.visibility = "hidden";
+          }
+
+          return ret;
+        }
+      </script>
+      <script>
+        var b_ms = 0;
+        var b_chnmode = 0;
+        var b_ipc = 0;
+        var b_alarmrec = 0;
+        var b_mir = 0;
+        var b_sdrec = 0;
+        $(document).ready(function() {
+          $.ajax({
+            url: "/conf/conf.xml",
+            type: "GET",
+            dataType: "xml",
+            timeout: 1000, //设定超时
+            cache: false, //禁用缓存
+            error: function(xml) {
+              alert("load xml error!");
+            },
+            success: GetVideochnnumComplete //设置成功后回调函数
+          });
+        });
+
+        var b_timefocus = 0;
+        /*
+         *@brief jQuery 事件
+         */
+        $("#dateyear").blur(function() {
+          b_timefocus = -1;
+        });
+        $("#dateyear").focus(function() {
+          b_timefocus = 1;
+        });
+        $("#datemounth").blur(function() {
+          b_timefocus = -1;
+        });
+        $("#datemounth").focus(function() {
+          b_timefocus = 1;
+        });
+        $("#dateday").blur(function() {
+          b_timefocus = -1;
+        });
+        $("#dateday").focus(function() {
+          b_timefocus = 1;
+        });
+        $("#timehour").blur(function() {
+          b_timefocus = -1;
+        });
+        $("#timehour").focus(function() {
+          b_timefocus = 1;
+        });
+        $("#timeminute").blur(function() {
+          b_timefocus = -1;
+        });
+        $("#timeminute").focus(function() {
+          b_timefocus = 1;
+        });
+        $("#timesecond").blur(function() {
+          b_timefocus = -1;
+        });
+        $("#timesecond").focus(function() {
+          b_timefocus = 1;
+        });
+
+        $("#dateyear").change(function() {
+          g_curYear = document.getElementById("dateyear").value;
+        });
+        $("#datemounth").change(function() {
+          g_curMoun = document.getElementById("datemounth").value;
+        });
+        $("#dateday").change(function() {
+          g_curDay = document.getElementById("dateday").value;
+        });
+        $("#timehour").change(function() {
+          g_curHour = document.getElementById("timehour").value;
+        });
+        $("#timeminute").change(function() {
+          g_curMin = document.getElementById("timeminute").value;
+        });
+        $("#timesecond").change(function() {
+          g_curSec = document.getElementById("timesecond").value;
+        });
+
+        //获取XML成功后回调函数
+        function GetVideochnnumComplete(xml) {
+          $(xml)
+            .find("Video")
+            .each(function(i) {
+              //查找所有Video节点并遍历
+              var Ms = $(this).children("Ms"); //获得子节点
+              b_ms = parseInt(Ms.text()); //获取节点文本
+              if (b_ms) {
+                document.getElementById("battery").style.visibility = "hidden"; //"visible";
+              } else {
+                document.getElementById("battery").style.visibility = "hidden";
+              }
+
+              var chnmode = $(this).children("MulType"); //获得子节点
+              b_chnmode = parseInt(chnmode.text()); //获取节点文本
+
+              if (b_chnmode) {
+                document.getElementById("ChnMode").style.display = "";
+              } else {
+                document.getElementById("ChnMode").style.display = "none";
+              }
+
+              var ipc = $(this).children("IPC"); //获得子节点
+              b_ipc = parseInt(ipc.text()); //获取节点文本
+
+              if (b_ipc) {
+                document.getElementById("ipc").style.display = "";
+              } else {
+                document.getElementById("ipc").style.display = "none";
+              }
+
+              var alarmrec = $(this).children("AlarmRec"); //获得子节点
+              b_alarmrec = parseInt(alarmrec.text()); //获取节点文本
+              b_alarmrec = 0; /*各机型暂时均不支持报警录像*/
+              if (b_alarmrec) {
+                document.getElementById("alarmrecord").style.display = "";
+              } else {
+                document.getElementById("alarmrecord").style.display = "none";
+              }
+
+              var mirror = $(this).children("Mirror"); //获得子节点
+              b_mir = parseInt(mirror.text()); //获取节点文本
+
+              if (b_mir) {
+                document.getElementById("mirror").style.display = "";
+              } else {
+                document.getElementById("mirror").style.display = "none";
+              }
+
+              var sdRec = $(this).children("SdRec"); //获得子节点
+              b_sdrec = parseInt(sdRec.text()); //获取节点文本
+              if (b_sdrec) {
+                document.getElementById("sdrecord").style.display = "";
+              } else {
+                document.getElementById("sdrecord").style.display = "none";
+              }
+
+              var product_type = $(this).children("productType");
+              b_productype = parseInt(product_type.text());
+
+              if (b_productype == MDVR_JT1_1080P) {
+                document.getElementById("videoPlay").style.display = "none";
+                document.getElementById("logo").style.display = "none";
+              } else {
+                document.getElementById("videoPlay").style.display = "";
+                document.getElementById("logo").style.display = "";
+              }
+
+              var m_wifi = $(this).children("Wifi"); //获得子节点
+              m_wifi = parseInt(m_wifi.text()); //获取节点文本
+              if (m_wifi) {
+                document.getElementById("WifiView").style.display = "";
+              } else {
+                document.getElementById("WifiView").style.display = "none";
+              }
+            });
+        }
+      </script>
+      <script>
+        var mNode_date = document.getElementsByName("date");
+        mNode_date[0].value = "15";
+        mNode_date[1].value = "1";
+        mNode_date[2].value = "2020";
+        var mNode_time = document.getElementsByName("time");
+        mNode_time[0].value = "15";
+        mNode_time[1].value = "1";
+        mNode_time[2].value = "23";
+        var mNode_tm = document.getElementsByName("tm");
+        mNode_tm[0].value = "1";
+        var mNode_DateType = document.getElementsByName("DateType");
+        mNode_DateType[0].value = "1";
+        var mNode_TimingMode = document.getElementsByName("TimingMode");
+        mNode_TimingMode[0].value = "1";
+        var mNode_TimeZone = document.getElementsByName("TimeZone");
+        mNode_TimeZone[0].value = "9";
+        var mNode_TimeType = document.getElementsByName("TimeType");
+        mNode_TimeType[0].value = "0";
+        var mNode_timingtime = document.getElementsByName("timingtime");
+        mNode_timingtime[0].value = "43200";
+        var mNode_timingtime = document.getElementsByName("timingtime");
+        mNode_timingtime[0].value = "12";
+        mNode_timingtime[1].value = "0";
+        mNode_timingtime[2].value = "0";
+        var mNode_DSTonoff = document.getElementsByName("DSTonoff");
+        mNode_DSTonoff[0].value = "0";
+        var mNode_DSTAdjust = document.getElementsByName("DSTAdjust");
+        mNode_DSTAdjust[0].value = "0";
+        var mNode_start_month = document.getElementsByName("start_month");
+        mNode_start_month[0].value = "9";
+        var mNode_start_sunday = document.getElementsByName("start_sunday");
+        mNode_start_sunday[0].value = "0";
+        var mNode_end_month = document.getElementsByName("end_month");
+        mNode_end_month[0].value = "3";
+        var mNode_end_sunday = document.getElementsByName("end_sunday");
+        mNode_end_sunday[0].value = "0";
+        var mNode_OprTimeOut = document.getElementsByName("OprTimeOut");
+        mNode_OprTimeOut[0].value = "1";
+        var mNode_m_ExtZone = document.getElementsByName("m_ExtZone");
+        mNode_m_ExtZone[0].value = "0";
+        var mNode_PowerOnMode = document.getElementsByName("PowerOnMode");
+        mNode_PowerOnMode[0].value = "0";
+        var mNode_DelayTime = document.getElementsByName("DelayTime");
+        mNode_DelayTime[0].value = "5";
+        var mNode_PowerOnTime = document.getElementsByName("PowerOnTime");
+        mNode_PowerOnTime[0].value = "8";
+        mNode_PowerOnTime[1].value = "0";
+        mNode_PowerOnTime[2].value = "0";
+        var mNode_PowerOffTime = document.getElementsByName("PowerOffTime");
+        mNode_PowerOffTime[0].value = "20";
+        mNode_PowerOffTime[1].value = "0";
+        mNode_PowerOffTime[2].value = "0";
+        var mNode_Maintonoff = document.getElementsByName("Maintonoff");
+        mNode_Maintonoff[0].value = "1";
+        var mNode_MaintTime = document.getElementsByName("MaintTime");
+        mNode_MaintTime[0].value = "2";
+        mNode_MaintTime[1].value = "0";
+        mNode_MaintTime[2].value = "0";
+        var mNode_Aout_Volume = document.getElementsByName("Aout_Volume");
+        mNode_Aout_Volume[0].value = "4";
+        var mNode_LiveView_Mode = document.getElementsByName("LiveView_Mode");
+        mNode_LiveView_Mode[0].value = "4";
+        var mNode_DelayOffVol = document.getElementsByName("DelayOffVol");
+        mNode_DelayOffVol[0].value = "8.50";
+        var mNode_PowerInVoltage = document.getElementsByName("PowerInVoltage");
+        mNode_PowerInVoltage[0].value = "(8-11.8V)";
+        var mNode_battery_turn = document.getElementsByName("battery_turn");
+        mNode_battery_turn[0].value = "0";
+      </script>
+    </div>
+  </body>
+</html>

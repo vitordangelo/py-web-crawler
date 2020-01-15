@@ -17,7 +17,7 @@ payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; \
     name=\"type\"\r\n\r\n{}\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; \
     name=\"channel\"\r\n\r\n{}\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; \
     name=\"select_type\"\r\n\r\n{}\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; \
-    name=\"Save\"\r\n\r\n{}\r\n-----011000010111000001101001--\r\n".format(0, 2020, 1, 9, 00, 00, 00, 23, 59, 59, 1, 1, 0, 'Search')
+    name=\"Save\"\r\n\r\n{}\r\n-----011000010111000001101001--\r\n".format(0, 2020, 1, 13, 00, 00, 00, 23, 59, 59, 1, 1, 0, 'Search')
 
 headers = {
     'content-type': 'multipart/form-data; boundary=---011000010111000001101001'}
@@ -35,13 +35,16 @@ for li in soup:
     object = {'name': file[0], 'file_size': float(file[1]),
               'date': file[3], 'time': file[4], 'path': url}
     files.insert(1, object)
+    print(files)
 
-def download(files):
-    for file in files:
-        file_path = "http://192.168.2.147{}".format(file['path'])
-        with open('/home/vitor/Documents/Apps/py-web-crawler/downloads/{}'.format(file['name']), 'wb') as f:
-            request = requests.get(file_path)
-            f.write(request.content)
-            print('File: {} complete'.format(file['name']))
 
-download(files)
+
+# def download(files):
+#     for file in files:
+#         file_path = "http://192.168.2.147{}".format(file['path'])
+#         with open('/home/vitor/Documents/Apps/py-web-crawler/downloads/{}'.format(file['name']), 'wb') as f:
+#             request = requests.get(file_path)
+#             f.write(request.content)
+#             print('File: {} complete'.format(file['name']))
+
+# download(files)
