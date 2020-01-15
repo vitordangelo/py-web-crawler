@@ -2,7 +2,7 @@ import pymongo
 from pymongo import MongoClient
 
 client = MongoClient(
-    "mongodb+srv://vitor:ednA89NDcAeOJyYa@cluster0-xvldm.gcp.mongodb.net/test?authSource=admin&replicaSet=Cluster0-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true")
+    "mongodb+srv://vitor:ednA89NDcAeOJyYa@cluster0-xvldm.gcp.mongodb.net/test?retryWrites=true&w=majority")
 
 db = client.scraping
 
